@@ -286,13 +286,18 @@ func (c *Cron) run(ctx context.Context) error {
 		// Determine the next entry to run.
 		sort.Sort(byTime(c.entries))
 
-		var timer *time.Timer
+		var timer *time.Ticker
 		if len(c.entries) == 0 || c.entries[0].Next.IsZero() {
 			// If there are no entries yet, just sleep - it still handles new entries
 			// and stop requests.
-			timer = time.NewTimer(100000 * time.Hour)
+			timer = time.NewTicker(100000 * time.Hour)
 		} else {
-			timer = time.NewTimer(c.entries[0].Next.Sub(now))
+			d := c.entries[0].Next.Sub(now)
+			if d <= 0 {
+				d = 1
+				// c.logger.Info("newticker reach max duration")
+			}
+			timer = time.NewTicker(d)
 		}
 
 		for {
@@ -358,7 +363,6 @@ func (c *Cron) run(ctx context.Context) error {
 						c.logger.Info("run", "now", now, "entry", e.ID, "title", e.Title, "next", e.Next)
 					}
 				}
-
 			}
 
 			break
