@@ -1,3 +1,3 @@
-module github.com/sujit-baniya/cron
+module github.com/oarkflow/cron
 
 go 1.19
