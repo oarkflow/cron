@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-// Configuration options for creating a parser. Most options specify which
+// ParseOption Configuration options for creating a parser. Most options specify which
 // fields should be included, while others enable features. If a field is not
 // included the parser will assume a default value. These options do not change
 // the order fields are parse in.
